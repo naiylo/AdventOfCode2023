@@ -1,6 +1,6 @@
 # AdventOfCode 02.12.2023 
 
-# Task: To get information, once a bag has been loaded with cubes, the Elf will 
+# Explanation: To get information, once a bag has been loaded with cubes, the Elf will 
 # reach into the bag, grab a handful of random cubes, show them to you, and then 
 # put them back in the bag. He'll do this a few times per game. You play several games 
 # and record the information from each game. Each game is listed with its ID number

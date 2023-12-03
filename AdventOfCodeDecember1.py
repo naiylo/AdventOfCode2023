@@ -1,6 +1,6 @@
 # AdventOfCode 01.12.2023 
 
-# Task: The newly-improved calibration document consists of lines of text;
+# Explanation: The newly-improved calibration document consists of lines of text;
 # each line originally contained a specific calibration value that the Elves 
 # now need to recover. 
 
