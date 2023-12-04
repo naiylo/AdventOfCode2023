@@ -169,6 +169,7 @@ def calibrateSum(string):
     if string[i] == "\n":
       length = i
       break
+    
   sum = 0
   i = 0
   while i < len(string):
@@ -215,8 +216,10 @@ def calibrateGearRatioSum(string):
     if string[i] == "\n":
       length = i
       break
+
   sum = 0
   i = 0
+  list = []
   while i < len(string):
     correct = 0
     if string[i].isdigit():
@@ -228,38 +231,48 @@ def calibrateGearRatioSum(string):
       indexOfGear = [] 
       for j in range(i-1,endIndex+1):
         try:
-          if string[j+length+1] == "*":
-            indexOfGear.insert(j+length+1,0)
+          if string[j+length+1] == "*" and (j+length+1) not in indexOfGear:
+            indexOfGear.insert(0,j+length+1)
         except: pass
         try: 
-          if string[j-length-1] == "*":  
-            indexOfGear.insert(j-length-1,0)
+          if string[j-length-1] == "*" and (j-length-1) not in indexOfGear:  
+            indexOfGear.insert(0,j-length-1)
         except: pass
         try: 
-          if string[i-1]  == "*":
-            indexOfGear.insert(i-1,0)
+          if string[i-1]  == "*" and (i-1) not in indexOfGear:
+            indexOfGear.insert(0,i-1)
         except: pass
         try:
-          if string[endIndex]  == "*":
-            indexOfGear.insert(endIndex,0)
+          if string[endIndex]  == "*" and (endIndex) not in indexOfGear:
+            indexOfGear.insert(0,endIndex)
         except: pass
-      print(indexOfGear)  
+      
+      indexOfGear.insert(0,int(number))  
+      list.insert(0,indexOfGear)
       i += skips
-      if correct == 1:
-        sum += int(number)
     else:
       i += 1
 
+  for listx in list:
+    for listy in list:
+      if listx == listy:
+        continue
+      for x in range (1,len(listx)):
+        for y in range(1,len(listy)):
+          if listx[x] == listy[y]:
+            sum += listx[0] * listy[0]
+
+  sum = int(sum / 2)
   return sum
       
 if __name__ == "__main__":
-  #print("Result with the Function calibrateSum:")
-  #print("Example 1:")
-  #print(calibrateSum(example1))
-  #print("Example 2:")
-  #print(calibrateSum(example2))
+  print("Result with the Function calibrateSum:")
+  print("Example 1:")
+  print(calibrateSum(example1))
+  print("Example 2:")
+  print(calibrateSum(example2))
   print("Result with the Function calibrateGearRatioSum:")
   print("Example 1:")
   print(calibrateGearRatioSum(example1))
-  #print("Example 2:")
-  #print(calibrateSum(example2))
+  print("Example 2:")
+  print(calibrateGearRatioSum(example2))
