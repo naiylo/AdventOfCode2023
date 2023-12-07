@@ -4,4 +4,4 @@
 
 ### Advent of Code is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like. People use them as interview prep, company training, university coursework, practice problems, a speed contest, or to challenge each other
 
-
+### My solutions will be working on the input as a string and not in the most efficient way, but in a way that is very understandable and transferable to other programming languages
