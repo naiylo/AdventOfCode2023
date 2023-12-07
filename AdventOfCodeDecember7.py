@@ -1009,6 +1009,8 @@ TTTA8 2
 44T44 894
 T9TQ4 178"""
 
+# Task one:
+
 customRanking = {"A" : 0, "K" : 1, "Q" : 2, "J" : 3, "T" : 4,
                  "9" : 5, "8" : 6, "7" : 7, "6" : 8, 
                  "5" : 9, "4" : 10,"3" : 11, "2" : 12}
@@ -1018,27 +1020,170 @@ def findBestHand(string):
     for hand in string.split("\n"):
         handBid = [hand[:hand.find(" ")], hand[hand.find(" ")+1:]]
         hands.append(handBid)
-    hands.sort(key=lambda x: (-max((x[0].count(char) for char in set(x[0])), default=0),
-                              customRanking.get(x[0][0], float('inf')),
-                              customRanking.get(x[0][1], float('inf')),
-                              customRanking.get(x[0][2], float('inf')),
-                              customRanking.get(x[0][3], float('inf')),
-                              customRanking.get(x[0][4], float('inf')),
-                              x[0]))
+    def handKey(x):
+        countRank = {char: x[0].count(char) for char in set(x[0])}
+        maxCount = max(countRank.values(), default=0)
+
+        if maxCount == 1:
+            number = 0
+        if maxCount == 2:
+            number = 1
+        if maxCount == 2 and len(countRank) == 3:
+            number = 2
+        if maxCount == 3:
+            number = 3
+        if maxCount == 3 and len(countRank) == 2:
+            number = 4
+        if maxCount == 4:
+            number = 5
+        if maxCount == 5:
+            number = 6
+        
+        return (
+            -number,
+            customRanking.get(x[0][0], float('inf')),
+            customRanking.get(x[0][1], float('inf')),
+            customRanking.get(x[0][2], float('inf')),
+            customRanking.get(x[0][3], float('inf')),
+            customRanking.get(x[0][4], float('inf')),
+            x[0]
+        )
+
+    hands.sort(key=handKey)
     hands.reverse()
     sum = 0
     counter = 1
-    print(hands)
+    # print(hands)
     for i in range(0,len(hands)):
         sum += int(hands[i][1]) * counter
-        print(str(sum) + " = alteSumme + " + str(hands[i][1]) + " * " + str(counter))
+        # print(str(counter) + "*" + str(hands[i][1]) + "=" + str(int(hands[i][1]) * counter))
+        counter += 1
+    return sum
+
+# Task two:
+
+customRankingWithJoker = {"A" : 0, "K" : 1, "Q" : 2, "T" : 3, "9" : 4,
+                 "8" : 5, "7" : 6, "6" : 7, "5" : 8, 
+                 "4" : 9, "3" : 10,"2" : 11, "J" : 12}
+
+def findBestHandWithJoker(string):
+    hands = []
+    for hand in string.split("\n"):
+        handBid = [hand[:hand.find(" ")], hand[hand.find(" ")+1:]]
+        hands.append(handBid)
+    def handKey(x):
+        countRank = {char: x[0].count(char) for char in set(x[0])}
+        maxCount = max(countRank.values(), default=0)
+        
+        try:
+            numberOfJ = countRank.get("J")
+        except: 
+            numberOfJ = 0
+
+        # Highcard
+        if maxCount == 1:
+            numberB = 0
+        # Twopair
+        if maxCount == 2:
+            numberB = 1
+        # Two twopair
+        if maxCount == 2 and len(countRank) == 3:
+            numberB = 2
+        # Threepair
+        if maxCount == 3:
+            numberB = 3
+        # Flush
+        if maxCount == 3 and len(countRank) == 2:
+            numberB = 4
+        # Fourpair
+        if maxCount == 4:
+            numberB = 5
+        # Fivepair
+        if maxCount == 5:
+            numberB = 6
+
+        number = 0
+
+        # Highcard [2,7,3,5,6] 
+        if numberB == 0:
+            if numberOfJ == 0:
+                number = 0
+            if numberOfJ == 1:
+                number = 1
+        # Twopair [2,J,J,5,6] 
+        if numberB == 1:
+            if numberOfJ == 0:
+                number = 1
+            if numberOfJ == 1:
+                number = 3
+            if numberOfJ == 2:
+                number = 3
+        # Two twopair [J,6,5,5,6] 
+        if numberB == 2:
+            if numberOfJ == 0:
+                number = 2
+            if numberOfJ == 1:
+                number = 4
+            if numberOfJ == 2:
+                number = 5
+        # Threepair [5,4,5,5,6] 
+        if numberB == 3:
+            if numberOfJ == 0:
+                number = 3
+            if numberOfJ == 1:
+                number = 5
+            if numberOfJ == 3:
+                number = 5    
+        # Flush [2,2,3,3,3]
+        if numberB == 4:
+            if numberOfJ == 0:
+                number = 4
+            if numberOfJ == 2:
+                number = 6
+            if numberOfJ == 3:
+                number = 6
+        # Fourpair [6,6,6,5,6] 
+        if numberB == 5:
+            if numberOfJ == 0:
+                number = 5
+            if numberOfJ == 1:
+                number = 6
+            if numberOfJ == 4:
+                number = 6
+        # Fivepair
+        if numberB == 6:
+            number = 6
+
+        return (
+            -number,
+            customRankingWithJoker.get(x[0][0], float('inf')),
+            customRankingWithJoker.get(x[0][1], float('inf')),
+            customRankingWithJoker.get(x[0][2], float('inf')),
+            customRankingWithJoker.get(x[0][3], float('inf')),
+            customRankingWithJoker.get(x[0][4], float('inf')),
+            x[0]
+        )
+
+    hands.sort(key=handKey)
+    hands.reverse()
+    sum = 0
+    counter = 1
+    # print(hands)
+    for i in range(0,len(hands)):
+        sum += int(hands[i][1]) * counter
+        # print(str(counter) + "*" + str(hands[i][1]) + "=" + str(int(hands[i][1]) * counter))
         counter += 1
     return sum
 
 if __name__ == "__main__":
-    print("Result with function findBestHand:")
-    print("Example 1:")
-    print(findBestHand(example1))
+    #print("Result with function findBestHand:")
+    #print("Example 1:")
+    #print(findBestHand(example1))
     #print("Example 2:")
     #print(findBestHand(example2))
+    #print("Result with function findBestHandWithJoker:")
+    #print("Example 1:")
+    #print(findBestHandWithJoker(example1))
+    print("Example 2:")
+    print(findBestHandWithJoker(example2))
 
