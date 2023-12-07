@@ -230,11 +230,7 @@ def calibrateViewest(string):
                       if colour == "g":
                         if int(number) > minimalGreen:
                           minimalGreen = int(number)
-      #print("minRed: " + str(minimalRed))
-      #print("minGreen: " + str(minimalGreen))
-      #print("minBlue: " + str(minimalBlue))
       power = minimalGreen * minimalBlue * minimalRed
-      #print("Power: " + str(power))
       sum += power
       currentGame += 1
   return sum
