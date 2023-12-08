@@ -808,7 +808,7 @@ def findWay(string):
         subDict = {}
         subDict[name] = left+" "+right
         dict.update(subDict)
-    print(dict)
+    # print(dict)
     counter = 0
     akt = "AAA"
     while akt != "ZZZ":
@@ -829,6 +829,7 @@ def findWay(string):
 # How many steps does it take before you're only on nodes that end with Z?
 
 import math
+from functools import reduce
 
 def findWayWithMultipleStarts(string):
     input = []
@@ -850,7 +851,7 @@ def findWayWithMultipleStarts(string):
         dict.update(subDict)
     # print(dict)
     listOfCounter = []
-    print(listOfStart)
+    # print(listOfStart)
     for start in listOfStart:
         counter = 0
         akt = start
@@ -864,12 +865,11 @@ def findWayWithMultipleStarts(string):
                 if i == "R":
                     akt =  dict[akt][4:]
                     counter += 1
-        print(akt)
+        # print(akt)
         listOfCounter.append(counter)
-    listOfCounter.sort()
-    print(listOfCounter)
+    lcm = reduce(lambda x, y: x * y // math.gcd(x, y), listOfCounter)
 
-    return math.lcm(listOfCounter)
+    return lcm
 
 if __name__ == "__main__":
     print("Result with findWay:")
