@@ -1,6 +1,21 @@
 # AdventOfCode 07.12.2023
 
-# Explanation: 
+# Explanation: In Camel Cards, you get a list of hands, and your goal is to order them based on the 
+# strength of each hand. A hand consists of five cards labeled one of A, K, Q, J, T, 9, 8, 7, 6, 5, 4, 3, or 2. 
+# The relative strength of each card follows this order, where A is the highest and 2 is the lowest.
+# Every hand is exactly one type. From strongest to weakest, they are:
+# Five of a kind, where all five cards have the same label: AAAAA
+# Four of a kind, where four cards have the same label and one card has a different label: AA8AA
+# Full house, where three cards have the same label, and the remaining two cards share a different label: 23332
+# Three of a kind, where three cards have the same label, and the remaining two cards are each different from any other card in the hand: TTT98
+# Two pair, where two cards share one label, two other cards share a second label, and the remaining card has a third label: 23432
+# One pair, where two cards share one label, and the other three cards have a different label from the pair and each other: A23A4
+# High card, where all cards' labels are distinct: 23456
+# Hands are primarily ordered based on type; for example, every full house is stronger than any three of a kind.
+# If two hands have the same type, a second ordering rule takes effect. Start by comparing the first card in each hand. 
+# If these cards are different, the hand with the stronger first card is considered stronger. If the first card in each hand have the same label, 
+# however, then move on to considering the second card in each hand. If they differ, the hand with the higher second card wins; otherwise, 
+# continue with the third card in each hand, then the fourth, then the fifth.
 
 example1 = """32T3K 765
 T55J5 684
@@ -1009,7 +1024,8 @@ TTTA8 2
 44T44 894
 T9TQ4 178"""
 
-# Task one:
+# Task one: 
+# Find the rank of every hand in your set. What are the total winnings?
 
 customRanking = {"A" : 0, "K" : 1, "Q" : 2, "J" : 3, "T" : 4,
                  "9" : 5, "8" : 6, "7" : 7, "6" : 8, 
@@ -1060,7 +1076,11 @@ def findBestHand(string):
         counter += 1
     return sum
 
-# Task two:
+# Task two: 
+#  cards can pretend to be whatever card is best for the purpose of determining hand type; for example, 
+# QJJQ2 is now considered four of a kind. However, for the purpose of breaking ties between two hands of the same type, 
+# J is always treated as J, not the card it's pretending to be: JKKK2 is weaker than QQQQ2 because J is weaker than Q
+# Using the new joker rule, find the rank of every hand in your set. What are the new total winnings?
 
 customRankingWithJoker = {"A" : 0, "K" : 1, "Q" : 2, "T" : 3, "9" : 4,
                  "8" : 5, "7" : 6, "6" : 7, "5" : 8, 
@@ -1073,87 +1093,40 @@ def findBestHandWithJoker(string):
         hands.append(handBid)
     def handKey(x):
         countRank = {char: x[0].count(char) for char in set(x[0])}
-        maxCount = max(countRank.values(), default=0)
+        amounts = sorted(countRank.values())
         
         try:
-            numberOfJ = countRank.get("J")
+            jokers = int(countRank.get("J"))
         except: 
-            numberOfJ = 0
-
-        # Highcard
-        if maxCount == 1:
-            numberB = 0
-        # Twopair
-        if maxCount == 2:
-            numberB = 1
-        # Two twopair
-        if maxCount == 2 and len(countRank) == 3:
-            numberB = 2
-        # Threepair
-        if maxCount == 3:
-            numberB = 3
-        # Flush
-        if maxCount == 3 and len(countRank) == 2:
-            numberB = 4
-        # Fourpair
-        if maxCount == 4:
-            numberB = 5
-        # Fivepair
-        if maxCount == 5:
-            numberB = 6
+            jokers = 0
+        
+        if jokers == amounts[-1]:
+            del amounts[-1]
 
         number = 0
-
-        # Highcard [2,7,3,5,6] 
-        if numberB == 0:
-            if numberOfJ == 0:
-                number = 0
-            if numberOfJ == 1:
-                number = 1
-        # Twopair [2,J,J,5,6] 
-        if numberB == 1:
-            if numberOfJ == 0:
-                number = 1
-            if numberOfJ == 1:
-                number = 3
-            if numberOfJ == 2:
-                number = 3
-        # Two twopair [J,6,5,5,6] 
-        if numberB == 2:
-            if numberOfJ == 0:
-                number = 2
-            if numberOfJ == 1:
-                number = 4
-            if numberOfJ == 2:
-                number = 5
-        # Threepair [5,4,5,5,6] 
-        if numberB == 3:
-            if numberOfJ == 0:
-                number = 3
-            if numberOfJ == 1:
-                number = 5
-            if numberOfJ == 3:
-                number = 5    
-        # Flush [2,2,3,3,3]
-        if numberB == 4:
-            if numberOfJ == 0:
-                number = 4
-            if numberOfJ == 2:
-                number = 6
-            if numberOfJ == 3:
-                number = 6
-        # Fourpair [6,6,6,5,6] 
-        if numberB == 5:
-            if numberOfJ == 0:
-                number = 5
-            if numberOfJ == 1:
-                number = 6
-            if numberOfJ == 4:
-                number = 6
         # Fivepair
-        if numberB == 6:
+        if jokers >= 5 or amounts[-1] + jokers >= 5:
             number = 6
+        # Fourpair
+        elif jokers >= 4 or amounts[-1] + jokers >= 4:
+            number = 5
+        # Flush
+        elif amounts[-1] + jokers >= 3:
+            rem_jokers = amounts[-1] + jokers - 3
+            if len(amounts) >= 2 and amounts[-2] + rem_jokers >= 2 or rem_jokers >= 2:
+                number = 4
+            else: number = 3
+        # Twopair
+        elif amounts[-1] + jokers >= 2:
+            rem_jokers = amounts[-1] + jokers - 2
+            if len(amounts) >= 2 and amounts[-2] + rem_jokers >= 2 or rem_jokers >= 2:
+                number = 2
+            else: number = 1
+        # Highcard
+        else:
+            number = 0
 
+        value.append(number)
         return (
             -number,
             customRankingWithJoker.get(x[0][0], float('inf')),
@@ -1163,27 +1136,35 @@ def findBestHandWithJoker(string):
             customRankingWithJoker.get(x[0][4], float('inf')),
             x[0]
         )
-
+    
+    value = []
     hands.sort(key=handKey)
+    value.sort()
+    value.reverse()
+
+    for i in range(0,len(value)):
+        hands[i].append(value[i])
+
     hands.reverse()
+
     sum = 0
     counter = 1
     # print(hands)
+
     for i in range(0,len(hands)):
         sum += int(hands[i][1]) * counter
-        # print(str(counter) + "*" + str(hands[i][1]) + "=" + str(int(hands[i][1]) * counter))
         counter += 1
     return sum
 
 if __name__ == "__main__":
-    #print("Result with function findBestHand:")
-    #print("Example 1:")
-    #print(findBestHand(example1))
-    #print("Example 2:")
-    #print(findBestHand(example2))
-    #print("Result with function findBestHandWithJoker:")
-    #print("Example 1:")
-    #print(findBestHandWithJoker(example1))
+    print("Result with function findBestHand:")
+    print("Example 1:")
+    print(findBestHand(example1))
+    print("Example 2:")
+    print(findBestHand(example2))
+    print("Result with function findBestHandWithJoker:")
+    print("Example 1:")
+    print(findBestHandWithJoker(example1))
     print("Example 2:")
     print(findBestHandWithJoker(example2))
 
