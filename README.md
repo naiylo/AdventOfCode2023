@@ -18,7 +18,7 @@ Day 05 | wip | -
 Day 06 | done | done
 Day 07 | done | done
 Day 08 | done | done
-Day 09 | - | -
+Day 09 | done | done
 Day 10 | - | -
 Day 11 | - | -
 Day 12 | - | -
