@@ -821,7 +821,7 @@ def findWay(string):
     return counter
 
 # Task two:
-# fter examining the maps a bit longer, your attention is drawn to a curious fact: 
+# After examining the maps a bit longer, your attention is drawn to a curious fact: 
 # the number of nodes with names ending in A is equal to the number ending in Z! 
 # If you were a ghost, you'd probably just start at every node that ends with A and 
 # follow all of the paths at the same time until they all simultaneously end up at 
