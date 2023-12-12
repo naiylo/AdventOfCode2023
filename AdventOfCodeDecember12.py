@@ -1032,10 +1032,10 @@ def calculatePossibilities(string):
         possibilities = 0
         numbers = []
         for i in line.split():
-            for j in i:
+            for j in i.split(","):
                 if j.isdigit():
-                    numbers.append(j)
-        print(numbers)
+                    numbers.append(int(j))
+        # print(numbers)
         hotsprings = [x for x in line if x == "." or x == "#" or x == "?"]
         questionmarks = []
         for i in range(len(hotsprings)):
@@ -1063,5 +1063,5 @@ if __name__ == "__main__":
     print("Result with function calculatePossibilities")
     print("Example 1:")
     print(calculatePossibilities(example1))
-    #print("Example 2:")
-    #print(calculatePossibilities(example2))
+    print("Example 2:")
+    print(calculatePossibilities(example2))
