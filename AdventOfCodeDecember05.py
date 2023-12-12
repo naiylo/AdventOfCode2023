@@ -291,55 +291,117 @@ humidity-to-location map:
 # Task one:
 # What is the lowest location number that corresponds to any of the initial seed numbers?
 
-def createHashMap(destinationRangeStart, sourceRangeStart, rangeLength):
-
-  destinationRange = range(destinationRangeStart, (destinationRangeStart + rangeLength))
-  sourceRange = range(sourceRangeStart, (sourceRangeStart + rangeLength))
-  hashmap = dict(zip(sourceRange,destinationRange))
-  print("check1")
-  return hashmap
-
 def calibrateLowestLocationNumber(string):
-  list = string.split()
-  listOfNumbers= []
-  currentBlock = []
+  lines = string.split("\n")
+  seeds = list(map(int, lines[0].split(" ")[1:]))
+  maps = []
+  i = 2
+  while i < len(lines):
+    maps.append([])
+    i+=1
+    while i < len(lines) and not lines[i] == "":
+      dstStart, srcStart, rangeLen = map(int, lines[i].split())
+      maps[-1].append((dstStart, srcStart, rangeLen))
+      i+=1
 
-  for item in list:
-    if item.isdigit():
-      currentBlock.append(item)
-    elif currentBlock:
-      listOfNumbers.append(currentBlock)
-      currentBlock = []
-
-  if currentBlock:
-        listOfNumbers.append(currentBlock)
-
-  startBlock = listOfNumbers[0]
-  hashBlock = listOfNumbers[1:]
-
-  hashTables = []
-  for j in range(0,len(hashBlock)):
-    currentHash = {}
-    for k in range(0,int(len(hashBlock[j])),3):
-      hashTable = createHashMap(int(hashBlock[j][k]),int(hashBlock[j][k+1]),int(hashBlock[j][k+2]))
-      currentHash.update(hashTable)
-    hashTables.append(currentHash)
-
-
-  for i in range(0,len(startBlock)):
-    for j in range(0,len(hashTables)):
-      currentHash = hashTables[j]
-      currentElem = int(startBlock[i])
-      try: startBlock[i] = currentHash[currentElem]
-      except: pass
+    i+=1
   
-  return min(startBlock)
+  locations = []
+  for seed in seeds:
+    currentNumber = seed
+    for currentMap in maps:
+      for dstStart, srcStart, rangeLen in currentMap:
+        if srcStart <= currentNumber < srcStart + rangeLen:
+          currentNumber = dstStart + (currentNumber - srcStart)
+          break
+    locations.append(currentNumber)
+  
+  lowest = min(locations)
+  return lowest
 
+# Task two:
+# The values on the initial seeds: line come in pairs. Within each pair, the first value is 
+# the start of the range and the second value is the length of the range. onsider all of the 
+# initial seed numbers listed in the ranges on the first line of the almanac. What is the 
+# lowest location number that corresponds to any of the initial seed numbers?
 
+# brute-force did not work well so i used a range mapping method (source: https://github.com/womogenes/AoC-2023-Solutions/blob/main/day_05/day_05_p2.py)
+
+def remap(lo, hi, m):
+    # Remap an interval (lo,hi) to a set of intervals m
+    ans = []
+    for dst, src, R in m:
+        end = src + R - 1
+        D = dst - src  # How much is this range shifted
+
+        if not (end < lo or src > hi):
+            ans.append((max(src, lo), min(end, hi), D))
+
+    for i, interval in enumerate(ans):
+        l, r, D = interval
+        yield (l + D, r + D)
+
+        if i < len(ans) - 1 and ans[i+1][0] > r + 1:
+            yield (r + 1, ans[i+1][0] - 1)
+
+    # End and start ranges can use some love
+    if len(ans) == 0:
+        yield (lo, hi)
+        return
+
+    if ans[0][0] != lo:
+        yield (lo, ans[0][0] - 1)
+    if ans[-1][1] != hi:
+        yield (ans[-1][1] + 1, hi)
+
+def calibrateLowestLocationNumberForRange(string):
+  lines = string.split("\n")
+  startSeeds = list(map(int, lines[0].split(" ")[1:]))
+  seeds = [
+    (startSeeds[i], startSeeds[i+1])
+    for i in range(0, len(startSeeds), 2)
+]
+  maps = []
+  i = 2
+  while i < len(lines):
+    maps.append([])
+    i+=1
+    while i < len(lines) and not lines[i] == "":
+      dstStart, srcStart, rangeLen = map(int, lines[i].split())
+      maps[-1].append((dstStart, srcStart, rangeLen))
+      i+=1
+    maps[-1].sort(key=lambda x: x[1])
+
+    i+=1
+  
+  locs = []
+
+  ans = 1 << 60
+
+  for start, R in seeds:
+    cur_intervals = [(start, start + R - 1)]
+    new_intervals = []
+
+    for m in maps:
+        for lo, hi in cur_intervals:
+            for new_interval in remap(lo, hi, m):
+                new_intervals.append(new_interval)
+
+        cur_intervals, new_intervals = new_intervals, []
+
+    for lo, hi in cur_intervals:
+        ans = min(ans, lo)    
+  
+  return ans
 
 if __name__ == "__main__":
   print("Result with the Function calibrateLowestLocationNumber:")
-  #print("Example 1:")
-  #print(calibrateLowestLocationNumber(example1))
+  print("Example 1:")
+  print(calibrateLowestLocationNumber(example1))
   print("Example 2:")
   print(calibrateLowestLocationNumber(example2))
+  print("Result with the Function calibrateLowestLocationNumberForRange:")
+  print("Example 1:")
+  print(calibrateLowestLocationNumberForRange(example1))
+  print("Example 2:")
+  print(calibrateLowestLocationNumberForRange(example2))
