@@ -7,6 +7,20 @@
 # reflection across either a horizontal line between two rows or across 
 # a vertical line between two columns.
 
+example0 = """#.###..#..###
+.#...##.####.
+.#...##.####.
+#.###..#..###
+.#######.##.#
+.#..##.#.#..#
+..#..#.##.#..
+##..##..###.#
+######.##..#.
+######.##....
+##..##..###.#
+..#..#.##.#..
+.#..##.#.#..#"""
+
 example1 = """#...##..#
 #....#..#
 ..##..###
@@ -1353,15 +1367,15 @@ import numpy as np
 
 def calculatePosition(matrix):
     for i in range(1, len(matrix)):
-            print("i: " + str(i))
+            # print("i: " + str(i))
             highM = matrix[:i]
             lowM = matrix[i:2*i]
             rangeHigh = len(highM)
             rangeLow = len(lowM)
             high = np.array(highM[abs(rangeHigh-rangeLow):])
             low = np.array(lowM)
-            print(high)
-            print(low)  
+            # print(high)
+            # print(low)  
             if np.array_equal(high, np.flipud(low)):
                 return i
     return 0
@@ -1378,82 +1392,113 @@ def findMirrors(string):
         sum += 100 * vertical + horizontal
     return sum
 
+
 # Task two:
-# 
+# pon closer inspection, you discover that every mirror has exactly one smudge: 
+# exactly one . or # should be the opposite type. In each pattern, you'll need 
+# to locate and fix the smudge that causes a different reflection line to be valid. 
+# (The old reflection line won't necessarily continue being valid after the smudge is fixed.)
+# In each pattern, fix the smudge and find the different line of reflection. What number do you 
+# get after summarizing the new reflection line in each pattern in your notes?
 
 import copy
 
-def calculatePosition2(matrix):
-    matrix = np.array(matrix)
+def calculatePosition2(matrix, skip):
     for i in range(1, len(matrix)):
-            # print("i: " + str(i))
+            
             highM = matrix[:i]
             lowM = matrix[i:2*i]
             rangeHigh = len(highM)
             rangeLow = len(lowM)
             high = np.array(highM[abs(rangeHigh-rangeLow):])
             low = np.array(lowM)
-            # print(high)
-            # print(low)  
+            
             if np.array_equal(high, np.flipud(low)):
-                return i
+                if i == skip[0]:
+                     continue
+                else:
+                     return i 
+    return 0
+
+def calculatePosition2T(matrix, skip):
+    for i in range(1, len(matrix)):
+            
+            highM = matrix[:i]
+            lowM = matrix[i:2*i]
+            rangeHigh = len(highM)
+            rangeLow = len(lowM)
+            high = np.array(highM[abs(rangeHigh-rangeLow):])
+            low = np.array(lowM)
+            
+            if np.array_equal(high, np.flipud(low)):
+                if i == skip[1]:
+                     continue
+                else:
+                     return i 
     return 0
 
 def getNumber(matrix):
-    vertical = calculatePosition2(matrix)
-    horizontal = calculatePosition2(np.rot90(matrix, k=-1))
-    return vertical, horizontal
+    vertical = calculatePosition(matrix)
+    horizontal = calculatePosition(np.rot90(matrix, k=-1))
+    return (vertical,horizontal)
+
+def getNumberN(matrix, skip):
+    vertical = calculatePosition2(matrix, skip)
+    horizontal = calculatePosition2T(np.rot90(matrix, k=-1), skip)
+    return (vertical,horizontal)
      
 
 def changeMirror(matrix):
+    linesOfReflection = []
+    vertical1, horizontal1 = getNumber(matrix)
+    linesOfReflection.append((vertical1,horizontal1))
     for i in range(len(matrix)):
         for j in range(len(matrix[0])):
             newMatrix = copy.deepcopy(matrix)
-            if newMatrix[i][j] == ".":
-                newMatrix[i][j] = "#"  
-            else: 
-                newMatrix[i][j] = "."
-            vertical1, horizontal1 = getNumber(matrix)
-            vertical2, horizontal2 = getNumber(newMatrix)
-            # print("matrix" + str(matrix))
-            # print(str(vertical1) + " " + str(horizontal1))
-            # print("newmatrix" + str(newMatrix))
-            # print(str(vertical2) + " " + str(horizontal2))
-            if vertical1 != vertical2:
-                return vertical2, 0
-            if horizontal1 != horizontal2:
-                return 0, horizontal2
+            newMatrix[i][j] = "." if newMatrix[i][j] == "#" else "#"
 
+            vertical2, horizontal2 = getNumberN(newMatrix, (vertical1,horizontal1))
+            linesOfReflection.append((vertical2, horizontal2))
+    
+    linesOfReflection = set(linesOfReflection)
+    return linesOfReflection
+            
 def findMirrors2(string):
     sum = 0
     for part in string.split("\n\n"):
         rows = part.split("\n")
         matrix = [list(row) for row in rows]
-        vertical = calculatePosition2(matrix)
-        matrixA = np.array(matrix.copy())
-        horizontal = calculatePosition2(np.rot90(matrixA, k=-1))
-        vertical2, horizontal2 = changeMirror(matrix)
-        print("vertical : " + str(vertical))
-        print("horizontal : " + str(horizontal))
-        print("vertical 2: " + str(vertical2))
-        print("horizontal 2: " + str(horizontal2))
-        sum += 100 * vertical2 + horizontal2
+        oldReflection = getNumber(matrix)
+        linesOfReflection = changeMirror(matrix)
+        
+        # print(oldReflection)
+        # print(np.array(matrix))
+        # print(linesOfReflection)
+
+        add = 0
+        for i in linesOfReflection:
+           if i != oldReflection:
+                add += 100*i[0] + i[1] 
+        sum += add
+        # print("sum: " + str(sum))
+        
+        
     return sum
                 
-
 if __name__ == "__main__":
-    #print("Result with function findMirrors:")
-    #print("Example 1:")
-    #print(findMirrors(example1))
-    #print("Example 2:")
-    #print(findMirrors(example2))
-    #print("Example 3:")
-    #print(findMirrors(example3))
-    #print("Example 4:")
-    #print(findMirrors(example4))
-    #print("Result with function findMirrors2:")
+    print("Result with function findMirrors:")
+    print("Example 1:")
+    print(findMirrors(example1))
+    print("Example 2:")
+    print(findMirrors(example2))
+    print("Example 3:")
+    print(findMirrors(example3))
+    print("Example 4:")
+    print(findMirrors(example4))
+    print("Result with function findMirrors2:")
     print("Example 3:")
     print(findMirrors2(example3))
-    #print("Example 4:")
-    #print(findMirrors2(example4))
+    print("Example 4:")
+    print(findMirrors2(example4))
+
 

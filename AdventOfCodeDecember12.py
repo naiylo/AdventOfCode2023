@@ -1,5 +1,10 @@
 # AdventOfCode 12.12.2023
 
+# Explanation: In the giant field just outside, the springs are arranged into rows. 
+# For each row, the condition records show every spring and whether it is operational (.) 
+# or damaged (#). This is the part of the condition records that is itself damaged; for 
+# some springs, it is simply unknown (?) whether the spring is operational or damaged
+
 example1 = """???.### 1,1,3
 .??..??...?##. 1,1,3
 ?#?#?#?#?#?#?#? 1,3,1,6
@@ -1008,6 +1013,12 @@ example2 = """.?#??.??#???.?? 2,6,2
 ?.#.??????.#?.#???? 1,1,3,2,3
 #?#??????? 3,4"""
 
+example3 = """.??..??...?##. 1,1,3"""
+
+# Task one:
+# For each row, count all of the different arrangements of operational and broken springs 
+# that meet the given criteria. What is the sum of those counts?
+
 from itertools import product
 
 def checkCombination(combination, numbers):
@@ -1059,9 +1070,108 @@ def calculatePossibilities(string):
     return sum
 
 
+# Task two:
+# To unfold the records, on each row, replace the list of spring conditions with five 
+# copies of itself (separated by ?) and replace the list of contiguous groups of damaged 
+# springs with five copies of itself (separated by ,).
+
+from tqdm import tqdm
+
+def dynamic(line, value):
+    value.append(0)
+
+    maxV = max(value)
+    line += "."
+
+    n = len(line)
+    m = len(value)
+    dp = [[[None for _ in range(maxV+1)]
+           for _ in range(m)] for _ in range(n)]
+    
+    for i in range(n):
+        x = line[i]
+        for j in range(m):
+            for k in range(value[j]+1):
+                if i == 0:
+                    if j != 0:
+                        dp[i][j][k] = 0
+                        continue
+
+                    if x == "#":
+                        if k != 1:
+                            dp[i][j][k] = 0
+                            continue
+                        dp[i][j][k] = 1
+                        continue
+
+                    if x == ".":
+                        if k != 0:
+                            dp[i][j][k] = 0
+                            continue
+                        dp[i][j][k] = 1
+                        continue
+
+                    if x == "?":
+                        if k not in [0, 1]:
+                            dp[i][j][k] = 0
+                            continue
+                        dp[i][j][k] = 1
+                        continue
+                # Process answer if current char is .
+                if k != 0:
+                    ansDot = 0
+                elif j > 0:
+                    assert k == 0
+                    ansDot = dp[i-1][j-1][value[j-1]]
+                    ansDot += dp[i-1][j][0]
+                else:
+                    # i>0, j=0, k=0.
+                    # Only way to do this is if every ? is a .
+                    ansDot = 1 if line[:i].count("#") == 0 else 0
+
+                # Process answer if current char is #
+                if k == 0:
+                    ansPound = 0
+                else:
+                    # Newest set
+                    ansPound = dp[i-1][j][k-1]
+
+                if x == ".":
+                    dp[i][j][k] = ansDot
+                elif x == "#":
+                    dp[i][j][k] = ansPound
+                else:
+                    dp[i][j][k] = ansDot + ansPound
+
+    add = dp[n-1][-1][0]
+    
+    return add
+
+def calculatePossibilities2(string):
+    sum = 0
+    lines = []
+    values = []
+    for line in string.split("\n"):
+        line = line.split(" ")
+        line[0] = "?".join([line[0]] * 5)
+        line[1] = ",".join([line[1]] * 5)
+        lines.append(line[0])
+        values.append([int(i) for i in line[1].split(",")])
+
+    for line, value in list(zip(lines, values)):
+        add = dynamic(line, value)
+        sum += add
+    return sum
+
+
 if __name__ == "__main__":
     print("Result with function calculatePossibilities")
     print("Example 1:")
     print(calculatePossibilities(example1))
     print("Example 2:")
     print(calculatePossibilities(example2))
+    print("Result with function calculatePossibilities2")
+    print("Example 3:")
+    print(calculatePossibilities2(example3))
+    print("Example 2:")
+    print(calculatePossibilities2(example2))
