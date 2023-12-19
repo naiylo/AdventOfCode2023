@@ -23,8 +23,8 @@ Day 10 | done | done
 Day 11 | done | done
 Day 12 | done | done
 Day 13 | done | done
-Day 14 | wip | -
-Day 15 | wip | -
+Day 14 | done | done
+Day 15 | done | wip
 Day 16 | wip | -
 Day 17 | - | -
 Day 18 | - | -
