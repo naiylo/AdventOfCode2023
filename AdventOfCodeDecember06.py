@@ -1,9 +1,5 @@
 # AdventOfCode 06.12.2023
 
-# Explanation: Your toy boat has a starting speed of zero millimeters per millisecond. 
-# For each whole millisecond you spend at the beginning of the race holding down the button, 
-# the boat's speed increases by one millimeter per millisecond. 
-
 example1 = """Time:      7  15   30
 Distance:  9  40  200"""
 
@@ -14,9 +10,6 @@ example3 = """Time:      57726992
 Distance:  291117211762026"""
 
 # Task one:
-# Calculate how many possibilities you have per race to beat the current largest 
-# distance and multiply this numbers together. (I also created the list with entrys 
-# beeing the number of milliseconds you need to hold down for the corresponding distance)
 
 def generateRange(time):
     dict = []
@@ -49,11 +42,6 @@ def calculateRange(string):
     return sum
 
 # Task two:
-# Adapt the algorithm to a larger race. To do this you needed to change the equation 
-# distance = hold * move
-# time = hold + move
-# ->
-# distance < hold * (time - hold)
 
 def calculateRangeForOneLargeRace(string):
     races = [lines for lines in string.split() if lines.isdigit()]

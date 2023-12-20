@@ -1,13 +1,5 @@
 # AdventOfCode 09.12.2023
 
-# Explanation: o best protect the oasis, your environmental report should 
-# include a prediction of the next value in each history. To do this, start 
-# by making a new sequence from the difference at each step of your history. 
-# If that sequence is not all zeroes, repeat this process, using the sequence 
-# you just generated as the input sequence. Once all of the values in your latest 
-# sequence are zeroes, you can extrapolate what the next value of the original 
-# history should be.
-
 example1 = """0 3 6 9 12 15
 1 3 6 10 15 21
 10 13 16 21 30 45"""
@@ -214,8 +206,6 @@ example2 = """9 12 17 23 28 40 101 333 1036 2906 7508 18265 42466 95247 207297 4
 2 -1 -12 -33 -64 -97 -109 -47 212 948 2754 6782 15101 31182 60466 110750 191522 309997 458812 585145 521986"""
 
 # Task one:
-# Analyze your OASIS report and extrapolate the next value for each history. 
-# What is the sum of these extrapolated values?
 
 def findNext(list):
     nextValue = 0
@@ -237,11 +227,6 @@ def predictNextValue(string):
     return sum
 
 # Task two: 
-# or each history, repeat the process of finding differences until the 
-# sequence of differences is entirely zero. Then, rather than adding a 
-# zero to the end and filling in the next values of each previous sequence, 
-# you should instead add a zero to the beginning of your sequence of zeroes, 
-# then fill in new first values for each previous sequence.
 
 def findPreviouse(list):
     previouseValue = 0

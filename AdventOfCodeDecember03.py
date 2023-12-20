@@ -1,13 +1,5 @@
 # AdventOfCode 03.12.2023
 
-# Explanation: The engineer explains that an engine part seems to be missing from 
-# the engine, but nobody can figure out which one. If you can add up all the 
-# part numbers in the engine schematic, it should be easy to work out which part is missing.
-# The engine schematic (your puzzle input) consists of a visual representation of the engine. 
-# There are lots of numbers and symbols you don't really understand, but apparently any number 
-# adjacent to a symbol, even diagonally, is a "part number" and should be included in your sum. 
-# (Periods (.) do not count as a symbol.) 
-
 example1 = """467..114..
 ...*......
 ..35..633.
@@ -161,7 +153,6 @@ example2 = """..........................380.......................143...........
 .........................610.26.............892...............................299............601............721..729........................"""
 
 # Task one: 
-# What is the sum of all of the part numbers in the engine schematic?
 
 def calibrateSum(string):
   length = 0
@@ -206,9 +197,6 @@ def calibrateSum(string):
   return sum
 
 # Task two:
-# A gear is any * symbol that is adjacent to exactly two part numbers. 
-# Its gear ratio is the result of multiplying those two numbers together.
-# What is the sum of all of the gear ratios in your engine schematic?
 
 def calibrateGearRatioSum(string):
   length = 0

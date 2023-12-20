@@ -1,11 +1,5 @@
 # AdventOfCode 04.12.2023
 
-# Explanation: The Elf leads you over to the pile of colorful cards. 
-# There, you discover dozens of scratchcards, all with their opaque covering 
-# already scratched off. Picking one up, it looks like each card has two lists 
-# of numbers separated by a vertical bar (|): a list of winning numbers and 
-# then a list of numbers you have. You organize the information into a table.
-
 example1 = """Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
 Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19
 Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1
@@ -235,9 +229,6 @@ Card 219: 44 83  7 80 68 17 15  4 45 31 | 41 57 52 79 99 49 98 17 28 82 55 93 50
 Card 220: 34 88 44 16 90  6 58 94 64 73 |  5 70 76 53 15 68 28  4 32 65 92 91 24 86 85 31 36 67 83 18 95 45  8 51 74"""
 
 # Task one:
-# You have to figure out which of the numbers you have appear in the list of winning 
-# numbers. The first match makes the card worth one point and each match after the first 
-# doubles the point value of that card.
 
 def calibratePoints(string):
   sum = 0
@@ -271,10 +262,6 @@ def calibratePoints(string):
   return sum
 
 # Task two:
-# Copies of scratchcards are scored like normal scratchcards and have the same card number 
-# as the card they copied. So, if you win a copy of card 10 and it has 5 matching numbers, 
-# it would then win a copy of the same cards that the original card 10 won: cards 11, 12, 
-# 13, 14, and 15. This process repeats until none of the copies cause you to win any more cards.
 
 def calibrateNumberOfCards(string):
   length = 0

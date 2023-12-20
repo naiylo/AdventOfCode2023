@@ -1,16 +1,5 @@
 # AdventOfCode 10.12.2023
 
-# Explanation: The pipes are arranged in a two-dimensional grid of tiles:
-# | is a vertical pipe connecting north and south.
-# - is a horizontal pipe connecting east and west.
-# L is a 90-degree bend connecting north and east.
-# J is a 90-degree bend connecting north and west.
-# 7 is a 90-degree bend connecting south and west.
-# F is a 90-degree bend connecting south and east.
-# . is ground; there is no pipe in this tile.
-# S is the starting position of the animal; there is a pipe on this tile, but your sketch doesn't show what shape the pipe has.
-# Based on the acoustics of the animal's scurrying, you're confident the pipe that contains the animal is one large, continuous loop.
-
 example1 = """-L|F7
 7S-7|
 L|7||
@@ -186,9 +175,6 @@ L.L7LFJ|||||FJL7||LJ
 L7JLJL-JLJLJL--JLJ.L"""
 
 # Task one:
-# Find the single giant loop starting at S. How many steps along the loop does 
-# it take to get from the starting position to the point farthest from the starting 
-# position?
 # direction:    0:N
 #            1:W   2:E
 #               3:S  
@@ -271,10 +257,6 @@ def findFurthestPipe(string):
     return mostfrequent // 2
             
 # Task two: 
-# Figure out whether you have time to search for the nest by calculating 
-# the area within the loop. How many tiles are enclosed by the loop? You 
-# can squeeze betwwen loops so only the area that is "inside" the loop is
-# to be found.
 
 import numpy as np
 from shapely.geometry import Polygon, Point

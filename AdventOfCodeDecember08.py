@@ -1,11 +1,5 @@
 # AdventOfCode 08.12.2023
 
-# Explanation: It seems like you're meant to use the left/right instructions to 
-# navigate the network. Perhaps if you have the camel follow the same instructions, 
-# you can escape the haunted wasteland! After examining the maps for a bit, two nodes 
-# stick out: AAA and ZZZ. You feel like AAA is where you are now, and you have to 
-# follow the left/right instructions until you reach ZZZ.
-
 example1 = """RL
 
 AAA = (BBB, CCC)
@@ -787,10 +781,6 @@ example4 = """LR
 XXX = (XXX, XXX)"""
 
 # Task one: 
-# Starting with AAA, you need to look up the next element based on the next left/right 
-# instruction in your input. Of course, you might not find ZZZ right away. If you run out of left/right 
-# instructions, repeat the whole sequence of instructions as necessary. Starting at AAA, follow the 
-# left/right instructions. How many steps are required to reach ZZZ?
 
 def findWay(string):
     input = []
@@ -821,12 +811,6 @@ def findWay(string):
     return counter
 
 # Task two:
-# After examining the maps a bit longer, your attention is drawn to a curious fact: 
-# the number of nodes with names ending in A is equal to the number ending in Z! 
-# If you were a ghost, you'd probably just start at every node that ends with A and 
-# follow all of the paths at the same time until they all simultaneously end up at 
-# nodes that end with Z. Simultaneously start on every node that ends with A. 
-# How many steps does it take before you're only on nodes that end with Z?
 
 import math
 from functools import reduce

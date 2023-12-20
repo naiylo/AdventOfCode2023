@@ -1,11 +1,5 @@
 # AdventOfCode 02.12.2023 
 
-# Explanation: To get information, once a bag has been loaded with cubes, the Elf will 
-# reach into the bag, grab a handful of random cubes, show them to you, and then 
-# put them back in the bag. He'll do this a few times per game. You play several games 
-# and record the information from each game. Each game is listed with its ID number
-# followed by a semicolon-separated list of subsets of cubes that were revealed from the bag.
-
 example1 = """Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
 Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
 Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
@@ -120,9 +114,6 @@ limits = {
 }
 
 # Task one: 
-# Determine which games would have been possible if the bag had been 
-# loaded with only 12 red cubes, 13 green cubes, and 14 blue cubes. What 
-# is the sum of the IDs of those games?
 
 def calibrateSum(string):
   sum = 0
@@ -173,8 +164,6 @@ def calibrateSum(string):
   return sum
 
 # Task two:
-# In each game you played, what is the fewest number of cubes of each color that 
-# could have been in the bag to make the game possible?
 
 def calibrateViewest(string):
   sum = 0

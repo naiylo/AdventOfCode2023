@@ -1,10 +1,5 @@
 # AdventOfCode 12.12.2023
 
-# Explanation: In the giant field just outside, the springs are arranged into rows. 
-# For each row, the condition records show every spring and whether it is operational (.) 
-# or damaged (#). This is the part of the condition records that is itself damaged; for 
-# some springs, it is simply unknown (?) whether the spring is operational or damaged
-
 example1 = """???.### 1,1,3
 .??..??...?##. 1,1,3
 ?#?#?#?#?#?#?#? 1,3,1,6
@@ -1016,8 +1011,6 @@ example2 = """.?#??.??#???.?? 2,6,2
 example3 = """.??..??...?##. 1,1,3"""
 
 # Task one:
-# For each row, count all of the different arrangements of operational and broken springs 
-# that meet the given criteria. What is the sum of those counts?
 
 from itertools import product
 
@@ -1071,9 +1064,6 @@ def calculatePossibilities(string):
 
 
 # Task two:
-# To unfold the records, on each row, replace the list of spring conditions with five 
-# copies of itself (separated by ?) and replace the list of contiguous groups of damaged 
-# springs with five copies of itself (separated by ,).
 
 from tqdm import tqdm
 

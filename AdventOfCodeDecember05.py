@@ -1,13 +1,5 @@
 # AdventOfCode 05.12.2023
 
-# Explanation: The almanac (your puzzle input) lists all of the seeds that need to be planted. 
-# It also lists what type of soil to use with each kind of seed, what type of fertilizer to use 
-# with each kind of soil, what type of water to use with each kind of fertilizer, and so on. 
-# Every type of seed, soil, fertilizer and so on is identified with a number, but numbers are reused 
-# by each category. Rather than list every source number and its corresponding destination number one 
-# by one, the maps describe entire ranges of numbers that can be converted. Each line within a map contains 
-# three numbers: the destination range start, the source range start, and the range length. 
-
 seedToSoil = "seed-to-soil"
 soilToFertilizer = "soil-to-fertilizer"
 fertilizerToWater = "fertilizer-to-water"
@@ -289,7 +281,6 @@ humidity-to-location map:
 1342577895 3179550973 89352473"""
 
 # Task one:
-# What is the lowest location number that corresponds to any of the initial seed numbers?
 
 def calibrateLowestLocationNumber(string):
   lines = string.split("\n")
@@ -320,11 +311,6 @@ def calibrateLowestLocationNumber(string):
   return lowest
 
 # Task two:
-# The values on the initial seeds: line come in pairs. Within each pair, the first value is 
-# the start of the range and the second value is the length of the range. onsider all of the 
-# initial seed numbers listed in the ranges on the first line of the almanac. What is the 
-# lowest location number that corresponds to any of the initial seed numbers?
-
 # brute-force did not work well so i used a range mapping method (source: https://github.com/womogenes/AoC-2023-Solutions/blob/main/day_05/day_05_p2.py)
 
 def remap(lo, hi, m):
