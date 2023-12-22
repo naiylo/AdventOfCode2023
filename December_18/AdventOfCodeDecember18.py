@@ -31,7 +31,7 @@ def findCubicBruteForce(string):
                     akt = (akt[0]+1,akt[1])
             marked.append(akt)
             stepsToGo -= 1
-    print(marked)
+    # print(marked)
     # To get the dimension
     nMax = 0
     nMin = 0
@@ -49,14 +49,14 @@ def findCubicBruteForce(string):
             nMin = i[1]
     n = nMax + abs(nMin)
     m = mMax + abs(mMin)
-    matrix = [['.' for _ in range((m+1)*2)] for _ in range((n+1)*2)]
-    #print(np.array(matrix))
+    matrix = [[' ' for _ in range((m+1)*2)] for _ in range((n+1)*2)]
+    # print(np.array(matrix))
     # Just for visualization
     for i in range(len(marked)):
         shifted = (marked[i][0]+n,marked[i][1]+m)
         marked[i] = shifted
         matrix[marked[i][0]][marked[i][1]] = "#"
-    #print(np.array(matrix))
+    # print(np.array(matrix))
     
     polygon = Polygon(marked)
     matrix = np.array(matrix)
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     print("Example 1:")
     print(findCubic(example1))
     print("Example 2:")
-    print(findCubic(example2))
+    #print(findCubic(example2))
     print("Result with function findTrueCubic:")
     print("Example 1:")
     print(findTrueCubic(example1))
