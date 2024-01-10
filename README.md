@@ -29,7 +29,7 @@ Day 16 | done | done
 Day 17 | wip | -
 Day 18 | done | done
 Day 19 | done | -
-Day 20 | - | -
+Day 20 | wip | -
 Day 21 | - | -
 Day 22 | - | -
 Day 23 | - | -
