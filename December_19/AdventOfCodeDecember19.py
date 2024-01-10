@@ -137,13 +137,13 @@ def calculateDistinctCombinations(string):
 
     
 if __name__ == "__main__":
-    #print("Result with function summary:")
+    print("Result with function summary:")
     #print("Example 1:")
     #print(summary(example1))
     #print("Example 2:")
     #print(summary(example2))
     #print("Result with function calculateDistinctCombinations:")
-    #print("Example 1:")
+    print("Example 1:")
     print(calculateDistinctCombinations(example1))
     #print("Example 2:")
     #print(calculateDistinctCombinations(example2))
